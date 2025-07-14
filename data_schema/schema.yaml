@@ -1,0 +1,15 @@
+columns:
+  - 0
+  - NumDots
+  - UrlLength
+  - AtSymbol
+  - NumDash
+  - NumPercent
+  - NumQueryComponents
+  - IpAddress
+  - HttpsInHostname
+  - PathLevel
+  - PathLength
+  - NumNumericChars
+  - Phising
+target_column: Phising

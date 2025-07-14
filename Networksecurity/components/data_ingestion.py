@@ -31,8 +31,10 @@ class DataIngestion:
             )
             logging.info("Performed train test split on the data")
             logging.info("Exited split_data_as_train_test method of DataIngestion class")
-            dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)
-            os.makedirs(dir_path, exist_ok=True)
+            train_dir = os.path.dirname(self.data_ingestion_config.training_file_path)
+            test_dir = os.path.dirname(self.data_ingestion_config.testing_file_path)
+            os.makedirs(train_dir, exist_ok=True)
+            os.makedirs(test_dir, exist_ok=True)
             train_set.to_csv(self.data_ingestion_config.training_file_path, index=False, header=True)
             test_set.to_csv(self.data_ingestion_config.testing_file_path, index=False, header=True)
             logging.info("Exported train and test file path")
@@ -62,3 +64,16 @@ class DataIngestion:
             return dataingestionartifact
         except Exception as e:
             raise NetworkSecurityException(e, sys)
+    def export_collection_as_dataframe(self):
+     try:
+        # Example: fetch data from MongoDB and return as DataFrame
+        
+        client = pymongo.MongoClient(os.getenv("MRL"))
+        db = client[self.data_ingestion_config.database_name]
+        collection = db[self.data_ingestion_config.collection_name]
+        df = pd.DataFrame(list(collection.find().limit(10)))
+        if "_id" in df.columns:
+            df = df.drop(columns=["_id"])
+        return df
+     except Exception as e:
+        raise NetworkSecurityException(e, sys)
